@@ -28,7 +28,8 @@
         m.RowList.observeField("itemSelected","playvideo")
         m.RowList.SetFocus(true)
         m.ItemVertical = m.top.FindNode("ItemVertical")
-        m.video = CreateObject("roSGNode", "VideoScene")
+        m.video = m.RowList.FindNode("video")
+        m.video.observeField("state","controlvideoplay")
     end function
 
     function GetRowListContent() as object
@@ -66,20 +67,36 @@
         itemDescription = m.itemVertical.FindNode("itemDescription")
         itemDescription.text = content.description
         videoContent = createObject("RoSGNode", "ContentNode")
-		videoContent.url = content.videoUrl
-		videoContent.title = "Test Video"
-		videoContent.streamformat = "hls"
-        m.top.contentVideo = videoContent
+        videoContent.url = content.videoUrl
+        videoContent.title = "Test Video"
+        videoContent.streamformat = "hls"
+        m.video.content = videoContent
     end function
 
     sub playvideo()
         m.top.visible = false
-        video = m.video.FindNode("video")
-        video.content = m.top.contentVideo
-        video.control = "play"
-        video.visible = true
-        video.setFocus(true)
+        m.video.control = "play"
+        m.video.visible = true
+        m.video.setFocus(true)
     end sub
+
+    sub controlvideoplay()
+      if (m.video.state = "finished") 
+        m.video.control = "stop"
+        m.top.setFocus(true)
+        m.video.visible = false
+      end if
+    end sub
+
+    function onKeyEvent(key as String,press as Boolean) as Boolean
+      if press then
+        if key = "back"
+            m.top.visible = true
+            return true
+        end if
+      end if
+      return false
+    end function
 ]]>
 </script>
 

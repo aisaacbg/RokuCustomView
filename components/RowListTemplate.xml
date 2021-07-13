@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <component name="RowListTemplate" extends="RowList" >
 
-<interface>
-  <field id = "data" type = "node" />
-</interface> 
+<script type="text/brightscript" >
+<![CDATA[
+	function init()
+		m.video = m.top.FindNode("video")
+		m.customscene = CreateObject("roSGNode", "CustomScene")
+	end function
+
+	function onKeyEvent(key as String,press as Boolean) as Boolean
+      if press then
+        if key = "back"
+          if (m.video.state = "playing")
+            m.video.control = "stop"
+			m.customscene.setFocus(true)
+			m.video.visible = false
+          end if
+        end if
+      end if
+
+      return false
+    end function
+]]>
+</script>
+
+<children>
+    <Video id="video" width="1280" height="720" translation="[0,0]" visible="false"/>
+</children>
 
 </component>
