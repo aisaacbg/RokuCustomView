@@ -5,25 +5,4 @@
   <field id = "data" type = "node" />
 </interface> 
 
-<script type="text/brightscript" >
-<![CDATA[
-
-	function onKeyEvent(key as String,press as Boolean) as Boolean
-      if press then
-        if key = "back"
-          if (m.video.state = "playing")
-            m.video.control = "stop"
-            m.videolist.setFocus(true)
-            m.video.visible = false
-
-            return true
-          end if
-        end if
-      end if
-
-      return false
-    end function
-]]>
-</script>
-
 </component>

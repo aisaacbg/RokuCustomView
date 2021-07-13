@@ -2,6 +2,10 @@
 
 <component name="CustomScene" extends="Scene" >
 
+<interface>
+  <field id = "contentVideo" type = "node" />
+</interface> 
+
 <script type="text/brightscript" >
 <![CDATA[
     function init()
@@ -24,7 +28,7 @@
         m.RowList.observeField("itemSelected","playvideo")
         m.RowList.SetFocus(true)
         m.ItemVertical = m.top.FindNode("ItemVertical")
-        m.video = m.top.findNode("Video")
+        m.video = CreateObject("roSGNode", "VideoScene")
     end function
 
     function GetRowListContent() as object
@@ -40,9 +44,11 @@
         row.title = item.name.original
             for each items in item.items
                 item = row.CreateChild("RowListItemData")
-                item.posterUrl = items.images[0].url
+                item.labelText= items.title.original
+                item.description= items.description.plain.original
+                item.posterUrl = items.images[1].url
                 item.videoUrl = items.video
-                item.posterVerticalUrl= items.images[1].url
+                item.posterVerticalUrl= items.images[0].url
             end for
         end for
         m.RowList.content = data
@@ -51,43 +57,29 @@
 
     function onRowItemFocused() as void
         maincontent = m.RowList.content.getChild(m.RowList.itemFocused)
-        content = maincontent.getChild(m.RowList.itemFocused)
-        print "111111111111111111111111111111"
-        print  content
+        row = m.RowList.rowItemFocused[1]
+        content = maincontent.getChild(row)
         itemImagen = m.itemVertical.FindNode("itemImage")
         itemImagen.uri = content.posterVerticalUrl
         itemTitle = m.itemVertical.FindNode("itemTitle")
-        itemTitle.text = "beIN SPORTS La Liga"
+        itemTitle.text = content.labelText
         itemDescription = m.itemVertical.FindNode("itemDescription")
-        itemDescription.text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        itemDescription.text = content.description
         videoContent = createObject("RoSGNode", "ContentNode")
 		videoContent.url = content.videoUrl
 		videoContent.title = "Test Video"
 		videoContent.streamformat = "hls"
-        m.video.content = videoContent
+        m.top.contentVideo = videoContent
     end function
 
     sub playvideo()
-        m.video.control = "play"
-        m.video.visible = true
-        m.video.setFocus(true)
+        m.top.visible = false
+        video = m.video.FindNode("video")
+        video.content = m.top.contentVideo
+        video.control = "play"
+        video.visible = true
+        video.setFocus(true)
     end sub
-
-    function onKeyEvent(key as String,press as Boolean) as Boolean
-      if press then
-        if key = "back"
-          if (m.video.state = "playing")
-            m.video.control = "stop"
-            m.videolist.setFocus(true)
-            m.video.visible = false
-
-            return true
-          end if
-        end if
-      end if
-
-      return false
-    end function
 ]]>
 </script>
 
@@ -96,7 +88,5 @@
         <RowListTemplate id="RowList"/>
         <ItemVertical id="ItemVertical"/>
     </LayoutGroup>
-        <Video id = "Video" visible = "false" />
-
 </children>
 </component>
