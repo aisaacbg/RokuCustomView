@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<component name="UrlTransfer" extends="Task">
+<interface> 
+  <field id="urlContent" type="array"/> 
+</interface>
+<script type="text/brightscript">
+  <![CDATA[
+  Sub Init()
+    url = "https://fx-nunchee-assets.s3.amazonaws.com/test/playlist.json"
+    https = CreateObject("roUrlTransfer")
+    https.SetCertificatesFile("common:/certs/ca-bundle.crt")
+    https.InitClientCertificates () 
+    https.EnableCookies () 
+    https.SetUrl(url)
+    feed = https.GetToString()
+    json = ParseJson(feed)
+    m.top.urlContent = json
+  End Sub
+
+  ]]>
+</script>
+</component>

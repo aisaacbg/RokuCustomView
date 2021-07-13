@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+ 
+<component name="RowListItemData" extends="ContentNode">
+ 
+<interface>
+  <field id="labelText" type="string" />
+  <field id="posterUrl" type="string" />
+  <field id="posterVerticalUrl" type="string" />
+  <field id="videoUrl" type="string" />
+  <field id="itemContent" type="node" onChange="itemContentChanged"/> 
+</interface>
+
+</component>
